@@ -35,7 +35,11 @@
 //-------------------------------------------------------------------------------------------------
 // Hardware includes
 //-------------------------------------------------------------------------------------------------
+#if DEVICE_F2833X
+#include "DSP2833x_Device.h"
+#else
 #include "cputimer.h"
+#endif
 
 //-------------------------------------------------------------------------------------------------
 // Type definitions.
@@ -47,6 +51,14 @@
 #define portSHORT       uint16_t
 #define portBASE_TYPE   uint16_t
 #define portSTACK_TYPE  uint16_t
+
+#ifndef uint8_t
+#define uint8_t         uint16_t
+#endif
+
+#ifndef int8_t
+#define int8_t          int16_t
+#endif
 
 typedef portSTACK_TYPE StackType_t;
 typedef int16_t        BaseType_t;

@@ -182,6 +182,33 @@ void vPortExitCritical( void )
   }
 }
 
+#if DEVICE_F2833X
+/*
+ * Setup the CPU timer 2 to generate the tick interrupts at the required
+ * frequency.
+ */
+void vPortSetupTimerInterrupt( void )
+{
+    /* Make sure timer is stopped */
+    CpuTimer2Regs.TCR.bit.TSS = 1;
+    /* Initialize timer period */
+    CpuTimer2Regs.PRD.all = (uint32_t)configCPU_CLOCK_HZ / (uint32_t)configTICK_RATE_HZ;
+    /* Set pre-scal counter to divide by 1 (SYSCLKOUT) */
+    CpuTimer2Regs.TPR.all = 0;
+    CpuTimer2Regs.TPRH.all = 0;
+    /* Reload Timer */
+    CpuTimer2Regs.TCR.bit.TRB = 1;
+    /* Free Run */
+    CpuTimer2Regs.TCR.bit.SOFT = 1;
+    CpuTimer2Regs.TCR.bit.FREE = 1;
+    /* Set Interrupt Handler */
+    EALLOW;
+    PieVectTable.TINT2 = &portTICK_ISR;
+    EDIS;
+    /* Enable Interrupt */
+    CpuTimer2Regs.TCR.bit.TIE = 1;
+}
+#else
 /*
  * Setup the CPU timer 2 to generate the tick interrupts at the required
  * frequency.
@@ -217,3 +244,4 @@ void vPortSetupTimerInterrupt( void )
     Interrupt_enable(INT_TIMER2);
     CPUTimer_startTimer(CPUTIMER2_BASE);
 }
+#endif
