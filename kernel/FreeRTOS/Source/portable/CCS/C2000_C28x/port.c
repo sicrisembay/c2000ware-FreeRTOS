@@ -207,6 +207,9 @@ void vPortSetupTimerInterrupt( void )
     EDIS;
     /* Enable Interrupt */
     CpuTimer2Regs.TCR.bit.TIE = 1;
+    IER |= M_INT14;
+    /* Start Timer */
+    CpuTimer2Regs.TCR.bit.TSS = 0;
 }
 #else
 /*
