@@ -53,11 +53,11 @@
 #define portSTACK_TYPE  uint16_t
 
 #ifndef uint8_t
-#define uint8_t         uint16_t
+#define uint8_t         unsigned char   // uint16_t
 #endif
 
 #ifndef int8_t
-#define int8_t          int16_t
+#define int8_t          char            // int16_t
 #endif
 
 typedef portSTACK_TYPE StackType_t;
